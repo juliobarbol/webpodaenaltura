@@ -1,0 +1,17 @@
+{
+  "name": "webpodaenaltura",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sitio de Poda en Altura AR — arboricultura en Córdoba Capital, Sierras Chicas y Valle de Punilla",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler versions upload"
+  },
+  "devDependencies": {
+    "wrangler": "^4.118.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

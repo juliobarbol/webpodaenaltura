@@ -1,0 +1,25 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "webpodaenaltura",
+	"compatibility_date": "2026-08-04",
+
+	// Sitio 100% estático: no hay script de Worker (`main`), sólo assets.
+	// Por eso tampoco lleva `"binding": "ASSETS"` — sólo es válido con `main`.
+	"assets": {
+		"directory": "./public",
+		"not_found_handling": "404-page"
+	},
+
+	"observability": {
+		"enabled": true
+	}
+
+	// Dominio propio: descomentar RECIÉN cuando podaenaltura-ar.com.ar
+	// esté como zona activa en Cloudflare (nameservers migrados).
+	// Ver README.md > "Migrar el dominio".
+	//
+	// "routes": [
+	// 	{ "pattern": "podaenaltura-ar.com.ar", "custom_domain": true },
+	// 	{ "pattern": "www.podaenaltura-ar.com.ar", "custom_domain": true }
+	// ]
+}
