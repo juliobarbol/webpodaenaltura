@@ -50,8 +50,17 @@ Inventario relevado del WordPress actual (11 páginas, 1 post de blog,
 | Términos y condiciones | Legal                                                |
 | Carrito / Checkout / Mi cuenta | De WooCommerce — **se descartan**            |
 
+Los textos completos relevados del sitio viejo están en
+`contenido/textos-sitio-actual.md`, y las decisiones de contenido del rediseño
+en `contenido/brief-para-diseno.md`. Esa carpeta es material de referencia: no
+se publica, no está dentro de `public/`.
+
+**Ojo con los Términos y Condiciones del sitio viejo**: son un copy-paste de
+otro negocio (una vinoteca) y no se migran.
+
 ## Contacto
 
+- Titular: Julio Barrientos Bolbochan, arborista profesional
 - WhatsApp: `+54 9 351 650-7699` → `https://wa.me/5493516507699`
 - Instagram: [@podaenaltura.ar](https://instagram.com/podaenaltura.ar)
 
