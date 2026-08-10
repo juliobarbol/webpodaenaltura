@@ -84,18 +84,20 @@ npm run deploy   # publica a Cloudflare
 
 ## Ramas y cierre de sesión
 
-**Este repo todavía no tiene rama `main`.** Todo vive en ramas `claude/*`. Hasta
-que exista `main`, decí explícitamente sobre qué rama estás trabajando.
+`main` es la rama de integración, creada el 10-ago-2026. Las tandas de trabajo
+salen de `main` en ramas `claude/*` y vuelven ahí.
 
-Al terminar una tanda de trabajo, cerrala de una de estas dos formas — nunca con
-una pregunta de compromiso tipo "¿seguimos con algo más?":
+Al terminar una tanda, cerrala de una de estas dos formas — nunca con una
+pregunta de compromiso tipo "¿seguimos con algo más?":
 
 - **Mergeada**, o
 - **Sin mergear, diciendo por qué** y qué falta exactamente para poder hacerlo.
 
-Una rama que queda sin mergear sin que nadie lo sepa es trabajo perdido. En el
-resto de los repos de Julio hay 18 ramas así, una de ellas con un fix de
-producción parado 47 días.
+Lo segundo es una respuesta válida: una rama se puede descartar porque lo que se
+quería ya estaba resuelto, o porque uno se arrepintió de la implementación. Lo
+que no vale es dejarla sin registro — una rama descartada a propósito se ve
+idéntica a una olvidada, y el que venga después no puede distinguirlas. Si se
+descarta, borrala o dejá escrito por qué.
 
 ## Deploy y verificación
 

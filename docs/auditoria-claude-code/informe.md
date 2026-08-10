@@ -32,7 +32,7 @@ y sesiones que cierran con una pregunta que nadie contesta.
 | Sesiones que cierran preguntando | **30 de 116** (26%), la mitad son cortesías vacías |
 | `CLAUDE.md` desactualizados | 4 afirmaciones falsas en uno, mapa roto en 32/32 módulos en otro |
 | Sesiones que se estiran sin criterio de cierre | **6 sesiones = 54%** del consumo total |
-| Ramas por defecto mal apuntadas | **5 de 9 repos**; `webpodaenaltura` no tiene `main` |
+| Ramas por defecto mal apuntadas | **5 de 9 repos** (`webpodaenaltura` ya corregido) |
 
 ---
 
@@ -186,7 +186,7 @@ en vez de a `main`:
 | `ArborRisk` | `claude/arborisk-github-deploy-fsowc6` |
 | `pruevacero` | `claude/pruebacero-player-analysis-7hu1mm` |
 | `gastoscasa` | `claude/shared-expenses-app-xn21ue` |
-| `webpodaenaltura` | **no tiene `main` en absoluto** |
+| `webpodaenaltura` | **no tenía `main` en absoluto** — creada el 10-ago en `34ebd89` |
 
 Esto no es cosmético. Cada sesión nueva aterriza en la rama equivocada, y cualquier
 medición automática sale mal. De hecho **rompió esta misma auditoría**: mis dos primeros
@@ -333,8 +333,9 @@ Por relación esfuerzo/resultado:
    la de captura visual que ataca tu limitación de sólo-Android. Es tooling, no un
    cambio de producto: es el único de los 18 casos que casi seguro no fue un descarte
    deliberado. Al levantarlas, corregir el "~8.000 líneas" que `nueva-feature` arrastra.
-2. **Poner `main` como rama por defecto** en los 5 repos, y crearla en
-   `webpodaenaltura`. Es lo que hizo que esta misma auditoría midiera mal.
+2. **Poner `main` como rama por defecto** en los 4 repos que faltan. Es lo que hizo
+   que esta misma auditoría midiera mal. En `webpodaenaltura` la rama ya se creó
+   (10-ago, `34ebd89`); resta marcarla como default en GitHub.
 3. **Arreglar `.claude/commands/publicar.md`** — el ejemplo que causó la alucinación,
    sigue ahí.
 4. **Cerrar las 18 ramas con una línea cada una**: se mergea, o se borra diciendo por
