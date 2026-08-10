@@ -134,6 +134,16 @@ porque aparece en un ejemplo — verificalo en el código antes de darlo por hec
 Existe para validar el pipeline de deploy. El rediseño lo reemplaza por
 completo.
 
+## Skills del repo
+
+- **`cerrar-sesion`** — cómo terminar una tanda: mergeada, o descartada por escrito.
+  Nunca en el limbo, nunca con "¿seguimos con algo más?".
+- **`verificar-deploy`** — publica y después confirma, archivo por archivo, que
+  Cloudflare está sirviendo lo que hay en el repo.
+
+Las dos salieron de la auditoría. Si las cambiás, que sigan siendo verificables
+con los comandos que ellas mismas traen.
+
 ## Auditoría de uso de Claude Code
 
 `docs/auditoria-claude-code/` tiene la auditoría de 116 sesiones (may–ago 2026)
