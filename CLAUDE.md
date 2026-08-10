@@ -58,6 +58,16 @@ se publica, no está dentro de `public/`.
 **Ojo con los Términos y Condiciones del sitio viejo**: son un copy-paste de
 otro negocio (una vinoteca) y no se migran.
 
+## Preguntas de negocio abiertas
+
+Estas tres frenan el rediseño desde el 4-ago-2026. Mientras no estén resueltas,
+no asumas una respuesta: preguntá o dejá el bloque marcado como pendiente.
+
+1. **¿Los cursos siguen activos?** Define si la sección Cursos se migra o se cae.
+2. **¿Se publica el PDF de poda segura?** Define si hay una descarga en el sitio.
+3. **¿Cuáles son las localidades exactas de cobertura?** Hace falta la lista
+   textual para la home y para el SEO local.
+
 ## Contacto
 
 - Titular: Julio Barrientos Bolbochan, arborista profesional
@@ -72,8 +82,58 @@ npm run dev      # servidor local en http://localhost:8787
 npm run deploy   # publica a Cloudflare
 ```
 
+## Ramas y cierre de sesión
+
+**Este repo todavía no tiene rama `main`.** Todo vive en ramas `claude/*`. Hasta
+que exista `main`, decí explícitamente sobre qué rama estás trabajando.
+
+Al terminar una tanda de trabajo, cerrala de una de estas dos formas — nunca con
+una pregunta de compromiso tipo "¿seguimos con algo más?":
+
+- **Mergeada**, o
+- **Sin mergear, diciendo por qué** y qué falta exactamente para poder hacerlo.
+
+Una rama que queda sin mergear sin que nadie lo sepa es trabajo perdido. En el
+resto de los repos de Julio hay 18 ramas así, una de ellas con un fix de
+producción parado 47 días.
+
+## Deploy y verificación
+
+`npm run deploy` publica, pero publicar no es verificar. Después de un deploy,
+confirmá que Cloudflare está sirviendo el commit esperado antes de dar la tarea
+por terminada — hubo un caso en otro repo de 4 días sirviendo una versión vieja
+sin que nadie lo notara.
+
+Julio trabaja **sólo desde Android** y no puede correr nada local. No cierres
+pidiéndole que abra la compu; si hace falta comprobación visual, sacá capturas
+vos con Playwright (Chromium ya está instalado en el entorno).
+
+## Cómo describir el código en este archivo
+
+No escribas números de línea ni totales de líneas: se desactualizan en días y
+Claude les cree. Para ubicar algo, dá el comando que lo encuentra:
+
+```bash
+grep -na "marcador" public/index.html
+```
+
+Cualquier dato que quede escrito acá tiene que poder verificarse con un comando
+que también esté escrito acá.
+
+## Ejemplos en la documentación
+
+Los ejemplos de este archivo y de `.claude/commands/` son ilustrativos: describen
+la **forma** de un pedido, no features que existan. No asumas que algo existe
+porque aparece en un ejemplo — verificalo en el código antes de darlo por hecho.
+
 ## Estado actual
 
 `public/index.html` es un **placeholder** funcional, no el diseño definitivo.
 Existe para validar el pipeline de deploy. El rediseño lo reemplaza por
 completo.
+
+## Auditoría de uso de Claude Code
+
+`docs/auditoria-claude-code/` tiene la auditoría de 116 sesiones (may–ago 2026)
+sobre los 9 repos de Julio: dónde se traba el trabajo, qué skills faltan y qué
+corregir en cada `CLAUDE.md`. Empezá por `informe.md`.
