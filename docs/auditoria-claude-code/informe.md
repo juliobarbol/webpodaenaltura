@@ -11,17 +11,24 @@ sesiones viejas. No existe herramienta que lo exponga y el contenedor es efímer
 lo que sigue está inferido de metadatos + evidencia dura de git, nunca de la
 conversación. Donde un patrón no se pudo verificar, se dice explícitamente.
 
+**Corolario, aprendido a los golpes:** los datos muestran *qué* pasó, nunca *por qué*.
+La primera versión de este informe leyó 18 ramas sin mergear como trabajo perdido;
+Julio corrigió que fueron cierres deliberados. La sección 1 quedó reescrita y el
+episodio se conserva acá porque ilustra exactamente el hallazgo que sobrevive: sin un
+registro de la decisión, cualquiera —persona o modelo— deduce mal.
+
 ---
 
 ## Resumen ejecutivo
 
-El problema no es la calidad de lo que Claude produce. Es **la última milla**: trabajo
-terminado que no llega a producción, y sesiones que cierran con una pregunta que nadie
-contesta.
+El problema no es la calidad de lo que Claude produce, ni —como creyó la primera
+versión de este informe— trabajo perdido. Es que **las decisiones no quedan
+registradas**: una rama que se descartó a propósito se ve idéntica a una que se olvidó,
+y sesiones que cierran con una pregunta que nadie contesta.
 
 | Dónde se traba | Magnitud |
 | --- | --- |
-| Trabajo terminado sin mergear | **18 ramas**, incluido un fix de producción de 47 días |
+| Ramas cerradas sin registro de por qué | **18 ramas** indistinguibles entre "descartada" y "olvidada" |
 | Sesiones que cierran preguntando | **30 de 116** (26%), la mitad son cortesías vacías |
 | `CLAUDE.md` desactualizados | 4 afirmaciones falsas en uno, mapa roto en 32/32 módulos en otro |
 | Sesiones que se estiran sin criterio de cierre | **6 sesiones = 54%** del consumo total |
@@ -29,35 +36,49 @@ contesta.
 
 ---
 
-## 1. El trabajo terminado que no llega a producción
+## 1. Las ramas cerradas sin registro
 
-Es el hallazgo dominante y el más caro. **18 de 116 ramas `claude/*` nunca se
-mergearon**, y no por falta de calidad: en casi todos los casos la sesión terminó
-preguntando *"¿mergeo?"* y la respuesta nunca llegó.
+**18 de 116 ramas `claude/*` nunca se mergearon.** La primera versión de este informe
+las llamó "trabajo perdido". **Eso era una inferencia equivocada** y Julio la corrigió:
+en general no se mergearon porque *lo que él quería principalmente ya estaba resuelto*,
+o porque *se arrepintió de la implementación*. Son cierres deliberados, no olvidos.
 
-| Qué quedó colgado | Repo | Días parado | Evidencia |
-| --- | --- | --- | --- |
-| **Fix del PDF**: raya negra al pie en documentos de 2+ páginas | presupuesto-ar | **47** | `c8cb419`, rama `poda-altura-product-analysis-8b48jf` |
-| **3 skills ya escritas** (403 líneas): `deploy-presupuesto`, `nueva-feature`, `webapp-testing` + `app-shot.cjs` | presupuesto-ar | **58** | `01ce8e6`, rama `cool-bohr-6riute` |
-| Reposición de stock + aging de deuda (126 líneas) | stockmerger | **53** | `f5b7cf2` |
-| 6 commits / ~694 líneas de features | gastoscasa | 12 | rama `app-feature-improvements-q8yuzu` |
-| Backup a Drive + el commit que documenta la autorización de deploy | ArborRisk | 62 | 3 commits sin mergear |
-| 4 páginas de exámenes (+1.376 líneas) y la página de privacidad | incontextenglish | 3 | `fd1a041`, `d545c6a` |
+Esa corrección importa porque muestra el límite del método: los metadatos ven que una
+rama no se mergeó, nunca **por qué**. La intención no está en los datos.
 
-**El fix del PDF es el caso a resolver hoy.** Afecta los presupuestos que le mandás a
-los clientes. El `border-top:5px` culpable sigue vivo en `index.html:14840` de `main`.
+**Pero el problema no desaparece, cambia de forma y de tamaño.** Nada distingue una
+rama que descartaste de una que se olvidó. El costo no es el trabajo — es que vos, y
+cada sesión futura, tienen que volver a deducir cuál fue cuál. Esta auditoría lo dedujo
+mal, que es precisamente la demostración del problema.
 
-**Las 3 skills sin mergear son irónicas**: son exactamente lo que esta auditoría iba a
-proponerte, ya escritas hace dos meses. Dato revelador: esa es la **única** sesión de
-`presupuesto-ar` iniciada desde la desktop app — las otras 51 son desde Android.
+Se arregla con casi nada: borrar la rama, o dejarle una línea diciendo por qué no va.
+
+### Estado verificable de las tres más citadas
+
+Esto es lo que dice el código, sin interpretar intención:
+
+| Rama / commit | Qué dice la evidencia |
+| --- | --- |
+| `c8cb419` — franja de marca del PDF duplicada al pie en multipágina | No está en `main`. La línea que genera la franja entró el 8-jun (`1f491a0`) y **ningún commit posterior la tocó**; tampoco hay otro que arregle lo mismo por otra vía. Si el defecto molestaba, sigue igual; si era un hallazgo lateral, está cerrado |
+| `f5b7cf2` — reposición de stock y aging de deuda (126 líneas) | Ausente de `main`: `_clientAging` da 0 ocurrencias |
+| `01ce8e6` — 3 skills (403 líneas) | Ausentes de `main`, que sólo tiene la skill `nuevo-tema-pdf` |
+
+Las otras ramas sin mergear —`gastoscasa` (~694 líneas), `ArborRisk` (backup a Drive),
+`incontextenglish` (exámenes y página de privacidad)— entran en la misma categoría:
+ausentes de `main`, sin registro de si fue decisión o descuido.
+
+**Las 3 skills son el único caso que conviene mirar aparte**, porque no son un cambio
+de producto del que uno se arrepienta: son herramientas. Ver la sección 8.1. Dato
+lateral: esa es la **única** sesión de `presupuesto-ar` iniciada desde la desktop app —
+las otras 51 son desde Android.
 
 ### Lo que NO es un problema (verificado)
 
-Dos alarmas que investigué y resultaron falsas, vale decirlo:
+Tres alarmas que se investigaron y resultaron falsas:
 
 - **`pruevacero` no tiene ramas abandonadas.** Las 7 están mergeadas.
 - **En `stock*`, 4 de las 5 ramas huérfanas eran falsos positivos** — mismo contenido
-  ya en `main`, verificado con `git patch-id --stable`. Sólo `f5b7cf2` es pérdida real.
+  ya en `main`, verificado con `git patch-id --stable`.
 - **`normalize()` y `schema.sql` nunca divergieron** entre `stockmerger` y
   `stockvendedor`, verificado en 6 cortes temporales. El miedo grande no se materializó.
 
@@ -231,8 +252,29 @@ Escribir la misma auditoría tres veces es la definición de una skill que falta
 | **`/nueva-feature`** | 18 sesiones de features | **Ya escrita**, sin mergear |
 | **`/cerrar-sesion`** | 15 cortesías vacías + 18 ramas colgadas | A crear |
 
-**Tres de las cinco ya existen.** La acción con mejor relación esfuerzo/resultado de
-toda esta auditoría es mergear `claude/cool-bohr-6riute`.
+**Tres de las cinco ya existen**, escritas el 13-jun en `claude/cool-bohr-6riute`
+(`01ce8e6`, 403 líneas), y son la acción con mejor relación esfuerzo/resultado de toda
+esta auditoría. Qué hace cada una:
+
+- **`deploy-presupuesto`** (93 líneas) — convierte en procedimiento ejecutable el
+  "Flujo de despliegue" que hoy está en prosa en el `CLAUDE.md`. Ataca lo que la propia
+  skill llama *"el bug más caro de este proyecto"*: desplegar sin subir `CACHE_VERSION`
+  en `sw.js`, con lo cual los celulares se quedan con la versión vieja cacheada. Sube
+  la versión, valida que los archivos nuevos estén en `APP_SHELL` (si no, se rompe el
+  offline), corre el chequeo de sintaxis del JS embebido y el test PWA, y define también
+  cuándo **no** desplegar.
+- **`nueva-feature`** (91 líneas) — las reglas no-negociables al sumar código: plata
+  siempre en centavos (nunca floats de pesos), fechas en local y nunca UTC
+  (`toISOString().slice(0,10)` corre el día en Argentina), escapado XSS, fotos en
+  IndexedDB, JS global sin módulos. Incluye la tabla de qué hace cada sección de
+  `index.html` y el recordatorio de revisar los **dos** bloques de CSS —`@media print`
+  y pantalla— al tocar el layout del presupuesto. **Ojo:** arrastra el "~8.000 líneas"
+  que la sección 3 marca como falso; corregirlo al levantarla.
+- **`webapp-testing`** (70 líneas + `app-shot.cjs`, 149) — maneja la app en un navegador
+  headless real: capturas, inspección del DOM, logs de consola, y la vista previa y el
+  PDF en los **tres** modos (presupuesto, estimativo, riesgo). El script levanta el repo
+  por HTTP, abre la app, le inyecta un setup JS para ponerla en el estado que se quiere,
+  y captura. Es lo que evita tener que verificar todo desde el celular.
 
 `/cerrar-sesion` es la que falta y la que ataca la causa raíz: obliga a terminar cada
 sesión mergeando, o diciendo explícitamente por qué no se mergea y qué falta —
@@ -242,7 +284,7 @@ prohibido cerrar con "¿seguimos con algo más?".
 
 | Automatización | Qué resuelve |
 | --- | --- |
-| **Barrido semanal de ramas sin mergear** en los 9 repos, con antigüedad | Las 18 ramas colgadas. Un fix de producción no puede estar 47 días parado sin que nadie lo note |
+| **Barrido semanal de ramas sin mergear** en los 9 repos, con antigüedad, pidiendo una línea de decisión por cada una: va o se borra | Las 18 ramas sin registro. No para forzar el merge, sino para que quede escrito cuál se descartó y por qué |
 | **Chequeo de deriva del `CLAUDE.md`**: comparar líneas y rangos declarados contra reales | Los 4 datos falsos, los 32 módulos con mapa roto |
 | **Verificación post-deploy**: que Cloudflare esté sirviendo el commit esperado | Los 4 días sirviendo `87aaf03` |
 | **Recordatorio de decisiones colgadas >7 días** | Las 10 decisiones reales abiertas |
@@ -287,14 +329,18 @@ informes detallados:
 
 Por relación esfuerzo/resultado:
 
-1. **Mergear `c8cb419`** — el fix del PDF que le llega a tus clientes. 47 días parado.
-2. **Mergear `claude/cool-bohr-6riute`** — te devuelve 3 skills ya escritas, incluida
-   la de captura visual que ataca tu limitación de sólo-Android.
-3. **Poner `main` como rama por defecto** en los 5 repos, y crearla en
-   `webpodaenaltura`.
-4. **Arreglar `.claude/commands/publicar.md`** — el ejemplo que causó la alucinación,
+1. **Levantar `claude/cool-bohr-6riute`** — te devuelve 3 skills ya escritas, incluida
+   la de captura visual que ataca tu limitación de sólo-Android. Es tooling, no un
+   cambio de producto: es el único de los 18 casos que casi seguro no fue un descarte
+   deliberado. Al levantarlas, corregir el "~8.000 líneas" que `nueva-feature` arrastra.
+2. **Poner `main` como rama por defecto** en los 5 repos, y crearla en
+   `webpodaenaltura`. Es lo que hizo que esta misma auditoría midiera mal.
+3. **Arreglar `.claude/commands/publicar.md`** — el ejemplo que causó la alucinación,
    sigue ahí.
-5. **Recuperar `f5b7cf2`** — 126 líneas de reposición de stock y aging de deuda.
+4. **Cerrar las 18 ramas con una línea cada una**: se mergea, o se borra diciendo por
+   qué. Media hora, y a partir de ahí ninguna sesión futura vuelve a deducir mal.
+5. Decidir sobre `c8cb419` con el dato de la sección 1: la franja duplicada del PDF
+   multipágina sigue sin arreglarse en `main` por ninguna vía. Va o se borra.
 6. Recién después, crear `/cerrar-sesion` y las Routines.
 
 ---
